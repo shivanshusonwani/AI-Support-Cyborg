@@ -21,13 +21,16 @@ export const analyseAndRespond = async (history, userMessage) => {
         1. Provide a helpful response.
         2. Rate your confidence (0.0 to 1.0).
         3. Provide a 5-word summary of the user's current need.
+        4. Set "isResolved" to true ONLY if the user says "thank you", "bye", "that's all", or confirms their problem is fixed.
 
         RETURN ONLY JSON:
         {
             "answer": "String",
             "confidence": number,
-            "summary": "string"
+            "summary": "string",
+            "isResolved": boolean
         }
+
     `
 
     try {

@@ -54,3 +54,13 @@ export const agentReply = async (req, res) => {
         res.status(500).json({ error: "Agent reply failed" });
     }
 }
+
+export const resolveChat = async (req, res) => {
+    try {
+        const { chatId } = req.params;
+        await Chat.findByIdAndUpdate(chatId, { status: 'resolved' });
+        res.status(200).json({ message: "Chat marked as resolved" });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to resolve chat" });
+    }
+}

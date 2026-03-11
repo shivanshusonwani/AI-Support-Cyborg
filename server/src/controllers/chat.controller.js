@@ -9,6 +9,19 @@ export const handleNewChat = async (req, res) => {
 
         if (!chat) return res.status(404).json({ error: "Chat not found" })
 
+        if (!messageContent || messageContent.trim() === "") {
+            const welcomeMessage = "Hello! I'm your CloudKeep AI assistant. How can I help you with your storage today?";
+            
+            const aiMessage = await Message.create({
+                chatId,
+                role: 'model',
+                content: welcomeMessage,
+                confidenceScore: 1.0
+            });
+
+            return res.json(aiMessage);
+        }
+
         const history = await Message.find({ chatId }).sort({ createdAt: -1 }).limit(10)
         const aiResult = await analyseAndRespond(history, messageContent)
 
@@ -23,9 +36,15 @@ export const handleNewChat = async (req, res) => {
 
         chat.summary = aiResult.summary
         chat.currentConfidence = aiResult.confidence
-        if (aiResult.confidence < 0.4) {
-            chat.status = 'flagged'
+        
+        if (aiResult.isResolved) {
+            chat.status = 'resolved';
+        } else if (aiResult.confidence < 0.4) {
+            chat.status = 'flagged';
+        } else {
+            chat.status = 'open';
         }
+
         await chat.save()
 
         res.json(aiMessage)
