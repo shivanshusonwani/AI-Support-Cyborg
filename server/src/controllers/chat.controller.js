@@ -23,6 +23,9 @@ export const handleNewChat = async (req, res) => {
 
         chat.summary = aiResult.summary
         chat.currentConfidence = aiResult.confidence
+        if (aiResult.confidence < 0.4) {
+            chat.status = 'flagged'
+        }
         await chat.save()
 
         res.json(aiMessage)

@@ -19,7 +19,7 @@ export const analyseAndRespond = async (history, userMessage) => {
 
         TASK:
         1. Provide a helpful response.
-        2. Rate your confidence (0.0 to 0.1).
+        2. Rate your confidence (0.0 to 1.0).
         3. Provide a 5-word summary of the user's current need.
 
         RETURN ONLY JSON:
