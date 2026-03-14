@@ -49,7 +49,12 @@ export const login = async (req, res) => {
 			process.env.JWT_SECRET,
 			{ expiresIn: "1d" },
 		);
-		res.json({ token, role: user.role, name: user.name });
+		res.json({
+			token,
+			userId: user.id,
+			name: user.name,
+			role: user.role,
+		});
 	} else {
 		res.status(401).json({ error: "Invalid credentials" });
 	}
